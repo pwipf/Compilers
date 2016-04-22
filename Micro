@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#echo > /dev/tty
+#echo ...Executing Micro Script... > /dev/tty
+#if [ ! -t 1 ] ; then
+#	echo ...Output Redirected... > /dev/tty
+#fi
+#echo > /dev/tty
+
+python parser.py $1
