@@ -1,0 +1,13 @@
+PROGRAM expr
+BEGIN
+
+	INT a,b;
+    FLOAT c;
+    
+	FUNCTION VOID main()
+	BEGIN	
+--		a := 5;
+		b := 8 * 9;
+--      c := 7.0;
+    END
+END
