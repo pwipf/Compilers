@@ -19,6 +19,8 @@ tokens = scanner.tokens
 
 accepted = 1; # flag to be set to zero on error. Test at the end to determine output.
 
+curtemp = 1;
+
 def p_program(p):
     '''program : PROGRAM id BEGIN pgm_body END'''
     pass
@@ -101,10 +103,15 @@ def p_func_declarations(p):
 
 def p_func_decl(p):
     """func_decl : start_of_func '(' param_decl_list ')' BEGIN func_body END"""
+    print('RET')
     symboltable.exit_function()
     
 def p_start_of_func(p):
     '''start_of_func : FUNCTION any_type id'''
+    
+    print('LABEL', p[3])
+    print('LINK')
+    
     symboltable.enter_function(p[3])
 
 def p_func_body(p):
@@ -135,6 +142,13 @@ def p_assign_stmt(p):
 
 def p_assign_expr(p):
     '''assign_expr : id ASSIGN expr'''
+    
+    if symboltable.get_global_type(p[1]) == 'INT':
+        print('STOREI', p[3], p[1])
+    else:
+        print('STOREF', p[3], p[1])
+        
+    
     pass
 
 def p_read_stmt(p):
@@ -151,6 +165,7 @@ def p_return_stmt(p):
 
 def p_expr(p):
     '''expr : expr_prefix factor'''
+    p[0] = p[2]
     pass
 
 def p_expr_prefix(p):
@@ -160,16 +175,25 @@ def p_expr_prefix(p):
 
 def p_factor(p):
     '''factor : factor_prefix postfix_expr'''
+    p[0]=p[2]
+    print('factor')
     pass
 
 def p_factor_prefix(p):
     '''factor_prefix : factor_prefix postfix_expr mulop 
         | empty'''
-    pass
+    
+    if len(p) > 2:
+        print('mulop',p[1],p[2])
+        
+        
+    p[0]='empty_facrot_prefix'
 
 def p_postfix_expr(p):
     '''postfix_expr : primary 
         | call_expr'''
+    print('postfix')
+    p[0]=p[1]
     pass
 
 def p_call_expr(p):
@@ -188,10 +212,33 @@ def p_expr_list_tail(p):
 
 def p_primary(p):
     '''primary : '(' expr ')' 
-        | id 
-        | INTLITERAL 
-        | FLOATLITERAL'''
-    pass
+                | id 
+                | intlit 
+                | floatlit'''
+        
+    if p[1] == '(':
+        p[0]=p[2]
+    else:
+        p[0]=p[1]
+        
+    
+def p_intlit(p):
+    '''intlit : INTLITERAL'''
+    global curtemp
+    print("STOREI",p[1],maketempstr(curtemp))
+    p[0]=maketempstr(curtemp)
+    curtemp+=1
+    
+def p_floatlit(p):
+    '''floatlit : FLOATLITERAL'''
+    global curtemp
+    print("STOREF",p[1],maketempstr(curtemp))
+    p[0]=maketempstr(curtemp)
+    curtemp+=1
+    
+def maketempstr(i):
+    s='$T'
+    return s + str(i) 
 
 def p_addop(p):
     '''addop : '+' 
@@ -255,7 +302,6 @@ def p_error(p):
     
 parser = yacc.yacc()
 
-
 try:                        # attempt to open file, read it in, build lexer, feed it data,
     f=open(sys.argv[1],'r') # and iterate through resulting token list
 except IndexError:
@@ -274,7 +320,8 @@ else:
     
     if accepted:
         #print("Accepted")
-        symboltable.print_table()
+        #symboltable.print_table()
+        pass
         
     else:
         #print("Not accepted")

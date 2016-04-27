@@ -48,6 +48,9 @@ def decl_str(name,value):
 def decl_var(name,type):
     add_to_table(name, type, current_scope, 0)
     history_list.append("name "+ name + " type " + type)
+    
+def get_global_type(name):
+    return symbol_table['GLOBAL'][name][name]["var_type"]
 
 is_error_existed = 0
 

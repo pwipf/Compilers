@@ -15,6 +15,7 @@ def p_program(p):
     '''program : label_statement LINK newln inst_list RET newln'''
     instructions.append('sys halt')
     pass
+    
 
 def p_label_statement(p):
     '''label_statement : LABEL label newln'''
