@@ -29,6 +29,8 @@ def nextlabel():
     labelcount +=1
     return label
 
+temporaries = {}
+
 def p_program(p):
     '''program : PROGRAM id BEGIN pgm_body END'''
     pass
@@ -65,6 +67,8 @@ def p_var_decl(p):
     '''var_decl : var_type id_list ';' '''
     for s in p[2]:
         symboltable.decl_var(s,p[1])
+        temporaries[s]={'temp':getcurtemp(), 'type': p[1]}
+        inctemp();
         #print("call decl_var(",s,", ",p[1],")")
     pass
     
@@ -165,6 +169,12 @@ def p_read_stmt(p):
 
 def p_write_stmt(p):
     """write_stmt : WRITE '(' id_list ')' ';'"""
+    
+    for i in p[3]:
+        if symboltable.get_global_type(i) == 'INT':
+            print('WRITEI',i)
+        else:
+            print('WRITEF',i)
     pass
 
 def p_return_stmt(p):
@@ -183,8 +193,12 @@ def p_expr_prefix(p):
 
 def p_factor(p):
     '''factor : factor_prefix postfix_expr'''
-    p[0]=p[2]
-    #print('factor')
+    if not p[1]==None:
+        print(p[1][1],p[1][0],p[2],getcurtemp())
+        p[0]=getcurtemp()
+        inctemp()
+    else:
+        p[0]=p[2]
     pass
 
 def p_factor_prefix(p):
@@ -192,10 +206,11 @@ def p_factor_prefix(p):
         | empty'''
     
     if len(p) > 2:
-        print('mulop',p[1],p[2])
-        
-        
-    p[0]='empty_facrot_prefix'
+        #print('mulop',p[1],p[2])
+        p[0]=[p[2],p[3]]
+    else:
+        pass
+        #p[0]='empty_prefix'
 
 def p_postfix_expr(p):
     '''postfix_expr : primary 
@@ -232,21 +247,24 @@ def p_primary(p):
     
 def p_intlit(p):
     '''intlit : INTLITERAL'''
-    global curtemp
-    print("STOREI",p[1],maketempstr(curtemp))
-    p[0]=maketempstr(curtemp)
-    curtemp+=1
+    print("STOREI",p[1],getcurtemp())
+    p[0]=getcurtemp()
+    inctemp()
     
 def p_floatlit(p):
     '''floatlit : FLOATLITERAL'''
-    global curtemp
-    print("STOREF",p[1],maketempstr(curtemp))
-    p[0]=maketempstr(curtemp)
-    curtemp+=1
+    print("STOREF",p[1],getcurtemp())
+    p[0]=getcurtemp()
+    inctemp()
     
-def maketempstr(i):
+def getcurtemp():
+    global curtemp
     s='$T'
-    return s + str(i) 
+    return s + str(curtemp)
+    
+def inctemp():
+    global curtemp
+    curtemp+=1
 
 def p_addop(p):
     '''addop : '+' 
@@ -256,6 +274,10 @@ def p_addop(p):
 def p_mulop(p):
     '''mulop : '*' 
         | '/' '''
+    if p[1]=='*':
+        p[0]='MUL'
+    else:
+        p[0]='DIV'
     pass
 
 def p_if_stmt(p):
@@ -279,6 +301,7 @@ def p_start_else(p):
 def p_cond(p):
     '''cond : expr compop expr'''
     p[0] = [p[2],p[1],p[3]]
+    print(p[2],p[1],p[3])
     pass
 
 def p_compop(p):
@@ -341,11 +364,14 @@ else:
     symboltable.exit_function()
     
     if accepted:
-        #print("Accepted")
+        print("Accepted")
         #symboltable.print_table()
         pass
         
     else:
-        #print("Not accepted")
+        print("Not accepted")
         pass
+        
+    for s in temporaries:
+        print(s, temporaries[s]['type'], temporaries[s]['temp'])
 
