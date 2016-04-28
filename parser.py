@@ -21,6 +21,14 @@ accepted = 1; # flag to be set to zero on error. Test at the end to determine ou
 
 curtemp = 1;
 
+labelcount = 1;
+
+def nextlabel():
+    label = "label"+str(labelcount)
+    global labelcount
+    labelcount +=1
+    return label
+
 def p_program(p):
     '''program : PROGRAM id BEGIN pgm_body END'''
     pass
@@ -176,7 +184,7 @@ def p_expr_prefix(p):
 def p_factor(p):
     '''factor : factor_prefix postfix_expr'''
     p[0]=p[2]
-    print('factor')
+    #print('factor')
     pass
 
 def p_factor_prefix(p):
@@ -192,7 +200,7 @@ def p_factor_prefix(p):
 def p_postfix_expr(p):
     '''postfix_expr : primary 
         | call_expr'''
-    print('postfix')
+    #print('postfix')
     p[0]=p[1]
     pass
 
@@ -270,6 +278,7 @@ def p_start_else(p):
 
 def p_cond(p):
     '''cond : expr compop expr'''
+    p[0] = [p[2],p[1],p[3]]
     pass
 
 def p_compop(p):
@@ -279,20 +288,33 @@ def p_compop(p):
         | NOT_EQUAL 
         | LESS_EQUAL 
         | GREATER_EQUAL'''
+    ops = {
+        ">" : "LE",
+        "!=" : "EQ",
+        "=" : "NE",
+        "<=" : "GT",
+        ">=" : "LT"
+    }
+    p[0] = ops[p[1]]
     pass
 
 def p_while_stmt(p):
-    '''while_stmt : start_while '(' cond ')' decl stmt_list end_while'''
+    '''while_stmt : start_while decl stmt_list end_while'''
+    print("JUMP",p[1][0])
+    print("Label",p[1][1])
     pass
     
 def p_start_while(p):
-    '''start_while : WHILE'''
-    #print("enter")
+    '''start_while : WHILE '(' cond ')' '''
     symboltable.enter_block()
+    label1 = nextlabel()
+    print("Lable", label1)
+    label2 = nextlabel()
+    print(p[3][0],p[3][1],p[3][2],label2)
+    p[0]=[label1,label2]
     
 def p_end_while(p):
     '''end_while : ENDWHILE'''
-    #print("exit")
     symboltable.exit_block()
 
 def p_error(p):

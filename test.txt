@@ -1,13 +1,13 @@
 PROGRAM expr
 BEGIN
 
-	INT a,b;
-    FLOAT c;
+	INT i;
     
 	FUNCTION VOID main()
 	BEGIN	
---		a := 5;
-		b := 8 * 9;
---      c := 7.0;
+    	i := 5;
+		WHILE (i != 0)
+			i := i-1;
+		ENDWHILE
     END
 END
