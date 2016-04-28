@@ -24,8 +24,8 @@ curtemp = 1;
 labelcount = 1;
 
 def nextlabel():
-    label = "label"+str(labelcount)
     global labelcount
+    label = "label"+str(labelcount)
     labelcount +=1
     return label
 
@@ -281,27 +281,42 @@ def p_mulop(p):
     pass
 
 def p_if_stmt(p):
-    '''if_stmt : start_if '(' cond ')' decl stmt_list else_part ENDIF'''
+    '''if_stmt : start_if decl stmt_list else_part ENDIF'''
     symboltable.exit_block()
+
+currentlabel = ""
     
 def p_start_if(p):
-    '''start_if : IF'''
+    '''start_if : IF '(' cond ')' '''
     symboltable.enter_block()
+    label = nextlabel()
+    print(p[3][0],p[3][1],p[3][2],label)
+    global currentlabel
+    currentlabel = label
+    p[0] = label
 
 def p_else_part(p):
     '''else_part : start_else decl stmt_list 
         | empty'''
     if len(p) > 3:
         symboltable.exit_block()
+        print("Label",p[1])
+    else:
+        global currentlabel
+        print("Label",currentlabel)
     
 def p_start_else(p):
     '''start_else : ELSE'''
     symboltable.enter_block()
+    label = nextlabel()
+    global currentlabel
+    print("JUMP",label)
+    print("Label",currentlabel)
+    p[0] = label
 
 def p_cond(p):
     '''cond : expr compop expr'''
     p[0] = [p[2],p[1],p[3]]
-    print(p[2],p[1],p[3])
     pass
 
 def p_compop(p):
