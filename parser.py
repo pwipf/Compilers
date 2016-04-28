@@ -316,7 +316,12 @@ def p_start_else(p):
 
 def p_cond(p):
     '''cond : expr compop expr'''
-    p[0] = [p[2],p[1],p[3]]
+    if symboltable.get_global_type(p[1]) == 'INT':
+        p[0] = [p[2]+"I",p[1],p[3]]
+    if symboltable.get_global_type(p[1]) == 'FLOAT':
+        p[0] = [p[2]+"F",p[1],p[3]]
+    if symboltable.get_global_type(p[1]) == 'STRING':
+        p[0] = [p[2]+"S",p[1],p[3]]
     pass
 
 def p_compop(p):
