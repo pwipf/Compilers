@@ -20,7 +20,7 @@ import ply.lex as lex
 import littlescanner
 from littlescanner import tokens
 
-from irparser import irparser,irlexer,instructions,variables,iraccepted
+from irparser import irparser,irlexer,instructions,iraccepted
 
 
 
