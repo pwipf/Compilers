@@ -58,7 +58,7 @@ keywords=(
     'RET'
     )
 
-tokens = syscall + move + instruction3 + comparei + comparef + keywords + (# tokens list, every token returned MUST end up with a type in this list
+tokens = keywords + (# tokens list, every token returned MUST end up with a type in this list
     'IDENTIFIER',
     'INTLITERAL',
     'FLOATLITERAL',
