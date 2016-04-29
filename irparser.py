@@ -59,7 +59,7 @@ def p_syscall(p):
 
 def p_move(p):
     '''move : MOVE operand operand newln'''
-    
+
     instructions.append('move '+p[2]+' '+p[3])
 
 def p_inst3(p):
@@ -72,10 +72,13 @@ def p_inst3(p):
     if(p[1]=='MULTF'):
         p[1]='MULF'
 
+    pre=p[1][0:3]
     if p[1][3]=='F':
-        p[1][3]='R'
+        pre+='R'
+    if p[1][3]=='I':
+        pre+='I'
 
-    instructions.append(p[1].lower() +' '+p[3]+' '+p[4])
+    instructions.append(pre.lower() +' '+p[3]+' '+p[4])
     pass
 
 def p_comparei(p):
@@ -86,7 +89,7 @@ def p_comparei(p):
 
 def p_comparef(p):
     '''comparef : COMPAREF operand operand label newln'''
-    instructions.append('cmpf '+p[2]+' '+p[3])
+    instructions.append('cmpr '+p[2]+' '+p[3])
     instructions.append('j'+p[1][0:2].lower()+' '+p[4])
     pass
 
