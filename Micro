@@ -7,4 +7,4 @@
 #fi
 #echo > /dev/tty
 
-python parser.py $1
+python littleparser.py $1
