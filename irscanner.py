@@ -1,3 +1,13 @@
+# Group 5
+# Philip Wipf
+# Evgenia Kolotiouk
+# Lei Xiong
+# CSCI 468
+# 29 Apr 2016
+# LittleScanner for Project Step 4
+
+# This file is just holds scanner definitions for the Little language IR scanner
+# (for converting Little IR to Tiny
 
 instruction3 = (
     'ADDI',

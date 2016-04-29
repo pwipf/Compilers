@@ -3,12 +3,10 @@
 # Evgenia Kolotiouk
 # Lei Xiong
 # CSCI 468
-# 10 Feb 2016
-# Scanner for Project Step 1
-#   Modified to work with Step 2 parser
-#   (added literals and added keywords and duals to tokens)
-#   (Also made the type equal to the value for keywords, instead of type='KEYWORD')
+# 29 Apr 2016
+# LittleScanner for Project Step 4
 
+# This file is just holds scanner definitions for the little language scanner
 
 literals = ['+','-','*','/','(',')',';',',','=','<','>']
 

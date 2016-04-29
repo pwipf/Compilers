@@ -6,6 +6,12 @@
 # 29 Apr 2016
 # Parser for Project Step 4
 
+# This is the main file that compiles LITTLE code into tiny code.
+# This file contains the grammar rules for LITTLE and stores up instructions
+#   in the irnodes list.
+# When finished parsing the LITTLE code, the result is fed as a single string
+#   to the IR parser which generates the TINY code.
+
 from __future__ import print_function # use python 3 style print statements
 import sys
 import ply.yacc as yacc

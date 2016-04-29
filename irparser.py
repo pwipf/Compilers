@@ -1,15 +1,25 @@
-from __future__ import print_function # use python 3 style print statements
+# Group 5
+# Philip Wipf
+# Evgenia Kolotiouk
+# Lei Xiong
+# CSCI 468
+# 29 Apr 2016
+# LittleScanner for Project Step 4
+
+# This parser uses the irscanner.py module and a simple grammar to convert
+# the Little IR code to Tiny code.
+
+# Tiny instructions are stored up in this instructions list
+
+instructions=[]
+iraccepted = 1; # flag to be set to zero on error. Test at the end to determine output.
+
 import ply.yacc as yacc
 import ply.lex as lex
-
-
-#from littleparser import irnodes, accepted as littleaccepted
 
 import irscanner
 from irscanner import tokens
 
-
-iraccepted = 1; # flag to be set to zero on error. Test at the end to determine output.
 
 
 def p_program(p):
@@ -125,8 +135,6 @@ def p_temp(p):
 def p_variable(p):
     '''variable : IDENTIFIER'''
     p[0]=p[1]
-    addvar(p[1])
-
 
 def p_error(p):
     global iraccepted
@@ -134,12 +142,6 @@ def p_error(p):
     print(p)
     iraccepted = 0;
 
-def addvar(v):
-    if not v in variables:
-        variables.append(v)
-
-variables=[]
-instructions=[]
 
 irlexer =lex.lex(module=irscanner)
 irparser = yacc.yacc(debug=False)
