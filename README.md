@@ -11,7 +11,7 @@ The "StepX" folders have test files for checking the output as we progressed thr
 - (4) generating the code.  
 
 Usage:  
-- The input to littleparser.py is the source to a LITTLE program, the output is a text file containing lines of "tiny" assembly instructions.
+- The input to littleparser.py is the source to a LITTLE program, the output is a text file containing lines of "tiny" assembly instructions (also has the IR instructions, commented out for the tiny simulator with ';').
 - The input to the tiny simulator is the output of littleparser.py.
 
 For example, if tinyNew.C is compiled to tiny.exe, and your LITTLE source file is program1.txt, you could run:  
